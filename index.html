@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem QR-Kehadiran KVSP 1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-title {
+            color: #1a73e8;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .pensyarah-info, .team-member {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #1a73e8;
+            margin-right: 20px;
+        }
+
+        .profile-details h3 {
+            color: #1a73e8;
+            margin-bottom: 5px;
+        }
+
+        .team-section {
+            grid-column: span 2;
+        }
+
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .slideshow-container {
+            grid-column: span 2;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            height: 400px;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+
+        .slideshow-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .dot.active, .dot:hover {
+            background-color: #1a73e8;
+        }
+
+        .buttons-section {
+            grid-column: span 2;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            min-width: 220px;
+        }
+
+        .btn-video {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+        }
+
+        .btn-website {
+            background: linear-gradient(to right, #1a73e8, #0d47a1);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-section, .slideshow-container, .buttons-section {
+                grid-column: span 1;
+            }
+            
+            .team-members {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons-section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .pensyarah-info, .team-member {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>SISTEM QR-KEHADIRAN KVSP 1</h1>
+            <p class="subtitle">Sistem pengurusan kehadiran berasaskan teknologi QR Code untuk kolej vokasional</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Pensyarah Section -->
+            <div class="card">
+                <h2 class="card-title">NAMA PENSYARAH</h2>
+                <div class="pensyarah-info">
+                    <img src="Pensyarah.jpg" alt="Pensyarah" class="profile-img">
+                    <div class="profile-details">
+                        <h3>PUAN NOR KAMALIAH BINTI BASHARUDDIN</h3>
+                        <p><strong>Jawatan:</strong> Ketua Projek</p>
+                        <p><strong>Bidang:</strong> Teknologi Maklumat</p>
+                        <p>Bertanggungjawab menyelia pembangunan Sistem QR-Kehadiran KVSP1.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistem UI Section -->
+            <div class="card">
+                <h2 class="card-title">UI SISTEM</h2>
+                <div style="text-align: center; margin-top: 15px;">
+                    <img src="systemui.jpg" alt="UI Sistem" style="width: 100%; border-radius: 8px; max-height: 220px; object-fit: cover;">
+                    <p style="margin-top: 15px; color: #555;">Antaramuka sistem yang intuitif dan mudah digunakan oleh pelajar dan staf.</p>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="card team-section">
+                <h2 class="card-title">AHLI KUMPULAN</h2>
+                <div class="team-members">
+                    <div class="team-member">
+                        <img src="haziqlim.jpg" alt="Ahli Kumpulan" class="profile-img">
+                        <div class="profile-details">
+                            <h3>MUHAMMAD HAZIQ BIN HALIM</h3>
+                            <p><strong>Peranan:</strong> Ketua Pembangunan</p>
+                            <p><strong>Tanggungjawab:</strong> Pengurus Projek dan Pengaturcara</p>
+                            <p>Mempunyai kepakaran dalam PHP dan MySQL.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="haziqnan.jpg" alt="Ahli Kumpulan" class="profile-img">
+                        <div class="profile-details">
+                            <h3>MUHAMMAD HAZIQ BIN ADNAN</h3>
+                            <p><strong>Peranan:</strong> Dokumentasi</p>
+                            <p><strong>Tanggungjawab:</strong> Frontend & UX/UI</p>
+                            <p>Ahli dalam membina dokumentasi projek.</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Buttons Section -->
+            <div class="buttons-section">
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn btn-video">
+                    <i class="fas fa-play-circle"></i> Tonton Video Sistem
+                </a>
+                <a href="https://qrkehadiran.teknokomsp1.com/pelajar_dash.php" target="_blank" class="btn btn-website">
+                    <i class="fas fa-external-link-alt"></i> Lawati Website Sistem
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Sistem QR-Kehadiran KVSP 1. Hak cipta terpelihara.</p>
+            <p>Dibangunkan untuk Kolej Vokasional dalam meningkatkan kecekapan pengurusan kehadiran.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Slideshow functionality
+        let slideIndex = 1;
+        showSlides(slideIndex);
+        
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+        
+        function showSlides(n) {
+            let slides = document.getElementsByClassName("slide");
+            let dots = document.getElementsByClassName("dot");
+            
+            if (n > slides.length) { slideIndex = 1; }
+            if (n < 1) { slideIndex = slides.length; }
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove("active");
+            }
+            
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("active");
+            }
+            
+            slides[slideIndex - 1].classList.add("active");
+            dots[slideIndex - 1].classList.add("active");
+        }
+        
+        // Auto advance slideshow every 5 seconds
+        setInterval(function() {
+            slideIndex++;
+            if (slideIndex > document.getElementsByClassName("slide").length) {
+                slideIndex = 1;
+            }
+            showSlides(slideIndex);
+        }, 5000);
+    </script>
+</body>
+</html>
